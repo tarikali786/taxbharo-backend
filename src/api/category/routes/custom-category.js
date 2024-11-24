@@ -5,6 +5,7 @@ module.exports = {
       path: "/categories-with-services",
       handler: "category.getCategoriesWithServices",
       config: {
+        auth:false,
         policies: [],
         middlewares: [],
       },

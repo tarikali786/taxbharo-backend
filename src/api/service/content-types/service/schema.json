@@ -70,6 +70,14 @@
     "Button_Url": {
       "type": "string",
       "required": true
+    },
+    "NavbarTitle": {
+      "type": "string",
+      "maxLength": 25,
+      "required": true
+    },
+    "price": {
+      "type": "string"
     }
   }
 }

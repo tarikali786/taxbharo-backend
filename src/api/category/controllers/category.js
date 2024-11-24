@@ -1,15 +1,14 @@
 "use strict";
 
-/**
- * category controller
- */
+const category = require("../routes/category");
+
+
 
 const { createCoreController } = require("@strapi/strapi").factories;
 
 module.exports = createCoreController(
   "api::category.category",
   ({ strapi }) => ({
-    // Extending the core controller with a custom method
     async getCategoriesWithServices(ctx) {
       try {
         // Fetch all categories with their services
@@ -20,18 +19,24 @@ module.exports = createCoreController(
               services: true, // Populate services related to the category
             },
           });
+        const services = await strapi.db
+          .query("api::service.service")
+          .findMany({
+            populate: {
+              category: true, // Populate services related to the category
+            },
+          });
 
-        // Construct the response with only category names and service names
         const result = categories.map((category) => ({
-          category: category.Category,
-          services: category.services.map((service) => ({
-            service_name: service.service_name,
-            pageUrl: service.pageUrl, // Include page URL
-          })),
+          category_name: category.Category, // Assuming category_name is a field in your category schema
+          services: services
+            .filter((service) => service.category.id === category.id)
+            .map((service) => ({
+              service_name: service.NavbarTitle,
+              pageUrl: service.pageUrl, // Include page URL
+            })),
         }));
-
-        // Send the response
-        ctx.send(result);
+        ctx.send({ data: result }, 200);
       } catch (err) {
         ctx.send({ error: "An error occurred while fetching the data." }, 500);
       }

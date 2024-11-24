@@ -813,6 +813,14 @@ export interface ApiBlogBlog extends Schema.CollectionType {
       'oneToMany',
       'api::service.service'
     >;
+    description: Attribute.RichText &
+      Attribute.CustomField<
+        'plugin::ckeditor.CKEditor',
+        {
+          output: 'HTML';
+          preset: 'rich';
+        }
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -877,6 +885,36 @@ export interface ApiFaqFaq extends Schema.CollectionType {
   };
 }
 
+export interface ApiNewsLetterNewsLetter extends Schema.CollectionType {
+  collectionName: 'news_letters';
+  info: {
+    singularName: 'news-letter';
+    pluralName: 'news-letters';
+    displayName: 'news-letter';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    email: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::news-letter.news-letter',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::news-letter.news-letter',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiServiceService extends Schema.CollectionType {
   collectionName: 'services';
   info: {
@@ -915,6 +953,12 @@ export interface ApiServiceService extends Schema.CollectionType {
     >;
     Button_name: Attribute.String & Attribute.Required;
     Button_Url: Attribute.String & Attribute.Required;
+    NavbarTitle: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 25;
+      }>;
+    price: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -954,6 +998,7 @@ declare module '@strapi/types' {
       'api::blog.blog': ApiBlogBlog;
       'api::category.category': ApiCategoryCategory;
       'api::faq.faq': ApiFaqFaq;
+      'api::news-letter.news-letter': ApiNewsLetterNewsLetter;
       'api::service.service': ApiServiceService;
     }
   }
