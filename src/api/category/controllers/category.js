@@ -30,7 +30,7 @@ module.exports = createCoreController(
           services: services
             .filter((service) => service.category.id === category.id)
             .map((service) => ({
-              service_name: service.NavbarTitle,
+              service_name: service.service_name,
               pageUrl: service.pageUrl, // Include page URL
             })),
         }));

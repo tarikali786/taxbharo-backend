@@ -11,6 +11,7 @@ module.exports = createCoreController("api::service.service", ({ strapi }) => ({
     const { id } = ctx.params;
     const service = await strapi.db.query("api::service.service").findOne({
       where: { pageUrl: id },
+      populate: ["photo"],
     });
     if (!service) {
       return ctx.notFound("Service not found");
